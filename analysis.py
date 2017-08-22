@@ -3,9 +3,12 @@
 
 from __future__ import division, print_function
 import psycopg2
+import os
 import pandas as pd
 import corex as ce
-from corex.vis_corex import *
+from corex.vis_corex import make_graph, trim, safe_open
+import networkx as nx
+import numpy as np
 
 conn = psycopg2.connect(dsn=os.environ["DATABASE_DSN"])
 query = """
@@ -23,6 +26,7 @@ ORDER BY date;
 """
 data = pd.read_sql(query, con=conn).\
           pivot_table(values='return', index='date', columns='ticker', fill_value=-1)
+gics = pd.read_sql("SELECT * FROM gics;", con=conn)
 conn.close()
 
 # "We included only the 388 companies which were on the S&P 500 for the entire period."

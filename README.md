@@ -28,7 +28,7 @@ The CorEx model here consists of three layers with 20, 3, and 1 units respective
 
 ## Result
 
-![thresholded graph of the learned structure]()
+![](tree_sfdp_w_splines.png)
 
 The figure is a replication of Fig. 4 in [Ver Steeg & Galstyan (2015)](#References), showing the overall structure.
 
