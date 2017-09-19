@@ -57,8 +57,8 @@ labels = data.loc[:, ~(data == -1).any(axis=0)].columns
 layers = []
 for n in (20, 3, 1):
     layer = ce.Corex(n_hidden=n, dim_hidden=3,
-                     max_iter=int(1e4), n_repeat=1, ram=16., max_samples=500, n_cpu=4,
-                     eps=1e-5, marginal_description='gaussian', smooth_marginals=False,
+                     max_iter=500, n_repeat=10, ram=16., max_samples=1000, n_cpu=4,
+                     eps=1e-5, marginal_description='gaussian', smooth_marginals=True,
                      missing_values=-1, seed=1, verbose=True)
     layers.append(layer)
 
@@ -68,7 +68,7 @@ Y1 = layers[0].fit_transform(X)
 Y2 = layers[1].fit_transform(Y1)
 Y3 = layers[2].fit_transform(Y2)
 end = default_timer()
-print("Start: {0}\tEnd: {1}\tElapsed: {2}".format(start, end, end - start))
+print("Start: {0}\tEnd: {1}\tElapsed: {2}".format(start, end, (end - start)/60. ))
 
 # Produce visualization
-vis_hierarchy(corexes=layers, column_label=labels, max_edges=400, prefix='output')
+[vis_hierarchy(corexes=layers, column_label=labels, max_edges=i, prefix='output_{i}'.format(i=i)) for i in range(380, 420, 5)]

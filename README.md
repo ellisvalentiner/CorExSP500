@@ -30,23 +30,59 @@ It's important to note that this may introduce a survivorship bias effect: compa
 
 I fit a CorEx model consisting of three layers with 20, 3, and 1 units. The hidden factor at each layer takes 3 discrete values.
 
-The authors didn't specify the number of iterations for convergence, so I set the maximum number of iterations to 100,000 for each layer and use up to 1,000 samples per iteration.
-
-The model took several hours to run on a MacBook Pro (Retina, 15-inch, mid-2015) with 2.2 GHz Intel Core i7 processor, and 16 GB 1600 MHz DDR3 RAM.
+The authors specified the 100 iterations with multiple restarts. I set the maximum number of iterations to 500 for each layer with multiple restarts and use up to 1,000 samples per iteration.
 
 ## Result
 
 ### Convergence
 
+Although the first two layers did not converge within 500 iterations, there was no substantial improvement after the early iterations. The third layer converged after 10 iterations.
 
+**First layer convergence**
+
+![](output/convergence0.jpg)
+
+**Second layer convergence**
+
+![](output/convergence1.jpg)
+
+**Third layer convergence**
+
+![](output/convergence2.jpg)
 
 ### Learned Representation
 
-Figure 4 in [Ver Steeg & Galstyan (2015)] shows the structure of the learned representation. The structure corresponding to Global Industry Classification Standard (GICS) sectors. The edge thickness is proportional to mutual information and node size reflective of multivariate mutual information among child nodes.
+Figure 4 in [Ver Steeg & Galstyan (2015)](#references) shows the structure of the learned representation. The structure corresponding to Global Industry Classification Standard (GICS) sectors. The edge thickness is proportional to mutual information and node size reflective of multivariate mutual information among child nodes.
 
-![](graph_prune_300_sfdp_w_splines.png) ![](graph_prune_400_sfdp_w_splines.png) ![](graph_prune_500_sfdp_w_splines.png) 
+The authors presented graphs with thresholded weights at 0.16 for display and later noted this was about 400 edges. The appendix included a graph using a lower, unspecified threshold.
 
-Difference may be due to inadvertent misspecification of the model and sensitivity to parameters.
+I generated graphs using 380, 390, and 400 edges.
+
+**Graph with 380 nodes**
+
+![](output/graph_prune_380_sfdp_w_splines.jpg)
+
+**Graph with 390 nodes**
+
+![](output/graph_prune_390_sfdp_w_splines.jpg)
+
+**Graph with 400 nodes**
+
+![](output/graph_prune_400_sfdp_w_splines.jpg)
+
+**Utilities Cluster**
+
+![](output/graph_prune_380_sfdp_w_splines_utilities.jpg)
+
+## Conclusion
+
+The results were fairly similar to Ver Steeg & Galstyan in that the learned representation appeared to recover GICS sector relationships. Notably the GICS sectors for materials and utilities were well clustered. Differences may be due to inadvertent misspecification of the model and sensitivity to parameters.
+
+Additionally Ver Steeg & Galstyan thresholded weights to determine the maximum number of edges, however I specified the number of edges exactly. This is because the visualization tools included in the corex module prefer specifying the number of edges. Although it would not be difficult to rewrite portions of these functions, it also wasn't my focus. This would be a good opportunity to improve this project.
+
+It is also worth noting that the GICS changes over time. On August 31, 2016 a new sector for real estate was added to the GICS. I have not fully investigated how this may affect the results.
+
+While it is unsurprising that companies are clustered within GICS sectors, the interesting piece is being able to visualize and quantify how companies are correlated within and between sectors. Given clusters, it is possible to monitor how well a company is performing relative to a meaningful subset of the S&P 500. For example, a company that begins to diverge from its clusters may signal interesting trends or changes to the market.
 
 ## References
 
